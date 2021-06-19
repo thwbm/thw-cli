@@ -1,26 +1,42 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../views/Home.vue";
+import { t } from "@/i18n";
 
-const routes: Array<RouteRecordRaw> = [
+export const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    path: "/general",
+    name: "general",
+    alias: "/",
+    redirect: { name: "jobDescription" },
+    component: () => import("@/components/layout/index.vue"),
+    meta: {
+      title: t("aside.general.title"),
+    },
+    children: [
+      {
+        path: "jobDescription",
+        name: "jobDescription",
+        component: () =>
+          import("@/components/general/jobDescription/index.vue"),
+        meta: {
+          title: t("aside.general.children.jobDescription.title"),
+        },
+      },
+      {
+        path: "profileData",
+        name: "profileData",
+        component: () => import("@/components/general/profileData/index.vue"),
+        meta: {
+          title: t("aside.general.children.profileData.title"),
+        },
+      },
+    ],
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior: () => ({ left: 0, top: 0 }),
 });
 
 export default router;
