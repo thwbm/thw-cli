@@ -1,4 +1,5 @@
-import scssVariables from "./src/styles/all";
+/* eslint-disable @typescript-eslint/no-var-requires */
+const scssVariables = require("./src/styles/all.ts");
 
 module.exports = {
   css: {

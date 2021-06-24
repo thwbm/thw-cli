@@ -30,7 +30,6 @@ export default defineComponent({
     );
     // 监听历史菜单可视区域宽度
     let erd = elementResizeDetectorMaker();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     erd.listenTo(document.getElementById("aside"), (el: any) => {
       console.log("el :>> ", el.offsetWidth);
     });

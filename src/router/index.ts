@@ -3,9 +3,19 @@ import { t } from "@/i18n";
 
 export const routes: Array<RouteRecordRaw> = [
   {
+    path: "/",
+    redirect: { name: "login" },
+  },
+  {
+    path: "/login",
+    name: "login",
+    // alias: "/",
+    component: () => import("@/views/login/index.vue"),
+  },
+  {
     path: "/general",
     name: "general",
-    alias: "/",
+    // alias: "/",
     redirect: { name: "jobDescription" },
     component: () => import("@/components/layout/index.vue"),
     meta: {
