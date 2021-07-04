@@ -7,7 +7,7 @@
       </template>
       <menu-item :routes="item.children" />
     </el-submenu>
-    <el-menu-item v-else :index="item.name">
+    <el-menu-item v-else-if="!item.meta.isNoMenu" :index="item.name">
       <template #title>
         <i :class="item.meta.icon"></i>
         <span>{{ item.meta.title }}</span>

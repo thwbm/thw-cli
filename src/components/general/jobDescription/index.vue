@@ -1,22 +1,24 @@
 <template>
   <div class="block">
-    <span class="demonstration">默认不区分颜色</span>
-    <el-rate v-model="count"></el-rate>
-    {{ a }}
+    <el-button type="primary" @click="open">主要按钮</el-button>
+    <index-Dialog v-model:isOpen="isOpen" />
   </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, computed } from "vue";
+import { ref, defineComponent } from "vue";
+import indexDialog from "./indexDialog.vue";
 export default defineComponent({
   name: "HelloWorld",
+  components: { indexDialog },
   setup() {
-    const count = ref(0);
+    const isOpen = ref(false);
 
-    const a = computed(() => {
-      return count.value * 3;
-    });
-    return { count, a };
+    function open() {
+      isOpen.value = true;
+    }
+
+    return { isOpen, open };
   },
 });
 </script>

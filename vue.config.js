@@ -17,8 +17,20 @@ module.exports = {
   },
   // devServer Options don't belong into `configureWebpack`
   devServer: {
-    public: "0.0.0.0:8080",
-    hot: true,
-    disableHostCheck: true,
+    // Network
+    public: "http://192.168.1.101:8080", // http://0.0.0.0:8080/
+    // Locale
+    host: "0.0.0.0",
+    port: "8080",
+    // 跨域
+    proxy: {
+      "/api": {
+        target: "http://localhost:4000/", //后端接口的根目录
+        changeOrigin: true, //是否跨域
+        pathRewrite: {
+          "^/api": "/",
+        },
+      },
+    },
   },
 };

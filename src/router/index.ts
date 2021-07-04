@@ -2,15 +2,31 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { t } from "@/i18n";
 
 export const routes: Array<RouteRecordRaw> = [
+  /** meat属性值的含义
+   * title 菜单名称
+   * isNoMenu 是否是菜单
+   */
+  {
+    path: "/:pathMatch(.*)",
+    redirect: "/",
+    meta: {
+      isNoMenu: true,
+    },
+  },
   {
     path: "/",
     redirect: { name: "login" },
+    meta: {
+      isNoMenu: true,
+    },
   },
   {
     path: "/login",
     name: "login",
-    // alias: "/",
     component: () => import("@/views/login/index.vue"),
+    meta: {
+      isNoMenu: true,
+    },
   },
   {
     path: "/general",

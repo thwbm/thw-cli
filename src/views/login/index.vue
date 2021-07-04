@@ -1,41 +1,75 @@
+// 登陆注册
 <template>
-  <div class="login">
+  <div class="login register">
     <el-form
       :model="ruleForm"
       :rules="rules"
-      ref="form"
-      label-width="100px"
+      ref="refForm"
+      label-width="80px"
       class="from"
     >
-      <el-form-item label="账号" prop="user">
-        <el-input v-model.trim="ruleForm.user"></el-input>
+      <el-form-item class="header" prop="radio">
+        <el-radio-group v-model="ruleForm.radio">
+          <el-radio-button
+            v-for="item in radioList"
+            :key="item.label"
+            :label="item.label"
+          >
+            {{ item.value }}
+          </el-radio-button>
+        </el-radio-group>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model.trim="ruleForm.password"></el-input>
-      </el-form-item>
-      <el-form-item label="验证码" prop="code">
-        <el-input v-model.trim="ruleForm.code"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')"
-          >提交</el-button
+      <div class="content">
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model.trim="ruleForm.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model.trim="ruleForm.password"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="确认密码"
+          prop="checkpass"
+          v-if="ruleForm.radio === 2"
         >
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-input
+            type="checkpass"
+            v-model.trim="ruleForm.checkpass"
+          ></el-input>
+        </el-form-item>
+      </div>
+      <el-form-item class="footer">
+        <el-button type="primary" @click="submitForm">确认</el-button>
+        <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import {
+  defineComponent,
+  ref,
+  reactive,
+  getCurrentInstance,
+  computed,
+  watch,
+} from "vue";
+import { useRouter } from "vue-router";
+import { register, login } from "@/api/login/index";
+import { encrypt } from "@/utils/crypto";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "login",
   setup() {
+    // this
+    const internalInstance: any = getCurrentInstance();
+    let _this = internalInstance.appContext.config.globalProperties;
+
     // 表单校验规则
     const validateUser = (rule: any, value: string, callback: any) => {
       if (value === "") {
-        callback(new Error("请输入账号"));
+        callback(new Error("请输入手机号"));
       } else {
         callback();
       }
@@ -47,45 +81,94 @@ export default defineComponent({
         callback();
       }
     };
-    const validateCode = (rule: any, value: string, callback: any) => {
+    const validateCheckPass = (rule: any, value: string, callback: any) => {
       if (value === "") {
-        callback(new Error("请输入验证码"));
+        callback(new Error("请输入密码"));
+      } else if (value !== ruleForm.value.password) {
+        callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
       }
     };
 
     // 变量：data
-    const form = ref();
+    const refForm = ref();
     const ruleForm = ref({
-      user: "",
+      radio: 1,
+      phone: "",
       password: "",
-      code: "",
+      checkpass: "",
     });
     const rules = {
-      user: [{ validator: validateUser, trigger: "blur" }],
+      phone: [{ validator: validateUser, trigger: "blur" }],
       password: [{ validator: validatePass, trigger: "blur" }],
-      code: [{ validator: validateCode, trigger: "blur" }],
+      checkpass: [{ validator: validateCheckPass, trigger: "blur" }],
     };
+    const radioList = [
+      { label: 1, value: "登录" },
+      { label: 2, value: "注册" },
+    ];
+
+    // VUEX：store
+    const store = useStore();
+    const user = computed(() => store.getters["user/user"]);
+
+    const router = useRouter();
 
     // 方法：methods
-    const submitForm = (val: any) => {
-      form.value.validate((valid: any) => {
-        console.log("ruleForm :>> ", ruleForm);
+    // 确认
+    const submitForm = () => {
+      refForm.value.validate((valid: any) => {
         if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
+          const { radio, phone, password } = ruleForm.value;
+          const params = {
+            phone: encrypt(phone),
+            password: encrypt(password, true),
+          };
+          switch (radio) {
+            case 1:
+              login(params).then(({ code, msg }: any) => {
+                if (code === 201) {
+                  store.dispatch("user/getUser"); // 获取用户信息
+                  router.push({ name: "general" });
+                } else if (code === 200 && msg) {
+                  _this
+                    .$confirm(msg, "提示", {
+                      confirmButtonText: "确定",
+                      cancelButtonText: "取消",
+                      type: "warning",
+                    })
+                    .then(() => {
+                      ruleForm.value.radio = 2;
+                      resetForm();
+                    });
+                }
+              });
+              break;
+            case 2:
+              register(params);
+              break;
+          }
         }
       });
-      console.log("object :>> ", val);
     };
-    const resetForm = (val: any) => {
-      console.log("object :>> ", val);
+    // 重置
+    const resetForm = () => {
+      const { radio } = ruleForm.value;
+      refForm.value.resetFields();
+      ruleForm.value.radio = radio;
     };
 
-    return { form, ruleForm, rules, submitForm, resetForm };
+    // 抛出
+    return {
+      refForm,
+      ruleForm,
+      rules,
+      radioList,
+      user,
+      submitForm,
+      resetForm,
+    };
   },
 });
 </script>
@@ -95,12 +178,31 @@ export default defineComponent({
   width: 100%;
   height: 100vh;
   background: $color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .from {
-    background: #ffffff;
-    padding: 40px;
-    width: 600px;
-    height: 400px;
-    margin: auto;
+    padding: 30px;
+    width: 500px;
+    height: 300px;
+    background: #ffffff80;
+    display: flex;
+    flex-flow: row wrap;
+    align-content: space-between;
+    text-align: center;
+    .el-form-item,
+    .content {
+      width: 100%;
+    }
+    .footer {
+      margin: 0;
+    }
+    .header,
+    .footer {
+      .el-form-item__content {
+        margin: 0 !important;
+      }
+    }
   }
 }
 </style>
