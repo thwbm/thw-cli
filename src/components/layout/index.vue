@@ -1,13 +1,17 @@
 <template>
   <el-container id="layout">
     <el-aside id="aside">
-      <menuComponent />
+      <el-scrollbar>
+        <menuComponent />
+      </el-scrollbar>
     </el-aside>
-    <el-container>
-      <el-header> header </el-header>
-      <el-main>
-        <router-view></router-view>
-      </el-main>
+    <el-container id="content">
+      <el-header id="content-header"> header </el-header>
+      <el-scrollbar id="content-main">
+        <el-main>
+          <router-view></router-view>
+        </el-main>
+      </el-scrollbar>
     </el-container>
   </el-container>
 </template>
@@ -23,16 +27,16 @@ export default defineComponent({
   },
   mounted() {
     this.$i18n.locale = "zh-cn";
-    console.log(
-      "object :>> ",
-      this.$i18n.locale,
-      this.$t("aside.general.title")
-    );
+    // console.log(
+    //   "object :>> ",
+    //   this.$i18n.locale,
+    //   this.$t("aside.general.title")
+    // );
     // 监听历史菜单可视区域宽度
-    let erd = elementResizeDetectorMaker();
-    erd.listenTo(document.getElementById("aside"), (el: any) => {
-      console.log("el :>> ", el.offsetWidth);
-    });
+    // let erd = elementResizeDetectorMaker();
+    // erd.listenTo(document.getElementById("aside"), (el: any) => {
+    //   console.log("el :>> ", el.offsetWidth);
+    // });
   },
 });
 </script>

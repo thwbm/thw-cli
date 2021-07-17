@@ -1,4 +1,4 @@
 module.exports = {
-  color: "#bc66cc",
+  color: "red",
   labelFontColor: "var(--label-font-color, red)",
 };

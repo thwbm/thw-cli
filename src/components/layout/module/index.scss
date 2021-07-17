@@ -1,9 +1,14 @@
-#layout {
-  width: 100%;
-  .el-aside {
-    height: 100vh;
-    .el-menu {
-      height: 100%;
+#app {
+  #layout {
+    #aside {
+      height: 100vh;
+      border-right: solid 1px #e6e6e6;
+      .el-menu {
+        border-right: none;
+      }
+    }
+    #content {
+      height: 100vh;
     }
   }
 }

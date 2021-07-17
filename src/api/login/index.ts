@@ -12,7 +12,7 @@ const login = (params: any, url = "/login") => {
 
 // 用户是否登录
 const getLogin = (url = "/getLogin") => {
-  return service.post(url);
+  return service.get(url);
 };
 
 // 退出登录
@@ -22,7 +22,7 @@ const logout = (url = "/logout") => {
 
 // 获取用户信息
 const getUser = (url = "/getUser") => {
-  return service.post(url);
+  return service.get(url);
 };
 
 export { register, login, getLogin, logout, getUser };

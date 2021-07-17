@@ -21,7 +21,7 @@
       </el-form-item>
       <div class="content">
         <el-form-item label="手机号" prop="phone">
-          <el-input v-model.trim="ruleForm.phone"></el-input>
+          <el-input v-model.trim="ruleForm.phone" maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input type="password" v-model.trim="ruleForm.password"></el-input>
@@ -32,7 +32,7 @@
           v-if="ruleForm.radio === 2"
         >
           <el-input
-            type="checkpass"
+            type="password"
             v-model.trim="ruleForm.checkpass"
           ></el-input>
         </el-form-item>
@@ -55,16 +55,16 @@ import {
   watch,
 } from "vue";
 import { useRouter } from "vue-router";
-import { register, login } from "@/api/login/index";
 import { encrypt } from "@/utils/crypto";
 import { useStore } from "vuex";
+import { register, login } from "@/api/login/index";
 
 export default defineComponent({
   name: "login",
   setup() {
-    // this
+    // 全局 this
     const internalInstance: any = getCurrentInstance();
-    let _this = internalInstance.appContext.config.globalProperties;
+    const _this = internalInstance.appContext.config.globalProperties;
 
     // 表单校验规则
     const validateUser = (rule: any, value: string, callback: any) => {
@@ -92,7 +92,6 @@ export default defineComponent({
     };
 
     // 变量：data
-    const refForm = ref();
     const ruleForm = ref({
       radio: 1,
       phone: "",
@@ -108,6 +107,9 @@ export default defineComponent({
       { label: 1, value: "登录" },
       { label: 2, value: "注册" },
     ];
+
+    // $ref
+    const refForm = ref();
 
     // VUEX：store
     const store = useStore();
@@ -130,7 +132,7 @@ export default defineComponent({
               login(params).then(({ code, msg }: any) => {
                 if (code === 201) {
                   store.dispatch("user/getUser"); // 获取用户信息
-                  router.push({ name: "general" });
+                  router.push({ path: "userCenter" });
                 } else if (code === 200 && msg) {
                   _this
                     .$confirm(msg, "提示", {
@@ -185,7 +187,7 @@ export default defineComponent({
     padding: 30px;
     width: 500px;
     height: 300px;
-    background: #ffffff80;
+    background: rgba($color: #ffffff, $alpha: 0.8);
     display: flex;
     flex-flow: row wrap;
     align-content: space-between;
