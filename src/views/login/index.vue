@@ -4,6 +4,7 @@
     <el-form
       :model="ruleForm"
       :rules="rules"
+      status-icon
       ref="refForm"
       label-width="80px"
       class="from"

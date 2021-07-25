@@ -50,11 +50,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted } from "vue";
+import {
+  defineComponent,
+  ref,
+  reactive,
+  onMounted,
+  onBeforeUnmount,
+} from "vue";
 import elementResizeDetectorMaker from "element-resize-detector";
 import { formatter } from "@/utils/utils";
 
 export default defineComponent({
+  name: "newTable",
   props: {
     /**
      * tableHerder 表头
@@ -128,7 +135,9 @@ export default defineComponent({
     },
   },
   setup(props) {
-    // data
+    // 变量：data
+    // dom监听
+    const erd = elementResizeDetectorMaker();
     // 报表高度
     const erdHeight = ref();
     // 报表数据
@@ -155,14 +164,12 @@ export default defineComponent({
         tableTotal.value = total;
       });
     };
-
     // 监听分页器-每页条数变化
     const handleSizeChange = (val: any) => {
       getParams.page = 1;
       getParams.pageSize = val;
       getTableData();
     };
-
     // 监听分页器-页数变化
     const handleCurrentChange = (val: any) => {
       getParams.page = val;
@@ -171,11 +178,8 @@ export default defineComponent({
 
     // 生命周期
     getTableData();
-
     onMounted(() => {
       // 动态设置报表高度
-      const erd = elementResizeDetectorMaker();
-      erd.uninstall(document.getElementById("content-main"));
       erd.listenTo(document.getElementById("content-main"), (elMain: any) => {
         const elTable = document.getElementById("el-table");
         if (!props.height && elTable) {
@@ -183,6 +187,10 @@ export default defineComponent({
           erdHeight.value = elMain.offsetHeight - elTable.offsetTop - 20 - 42;
         }
       });
+    });
+    onBeforeUnmount(() => {
+      // 删除监听
+      erd.uninstall(document.getElementById("content-main"));
     });
 
     // 抛出

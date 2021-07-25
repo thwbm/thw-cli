@@ -7,35 +7,52 @@
       :tableHerder="UserList"
       :getTableData="getUserList"
     />
+
+    <!-- 编辑 -->
+    <userControlDialog ref="userControlDialog" />
   </div>
 </template>
 
 <script lang="ts">
+import newTable from "@/components/newTable.vue";
+import userControlDialog from "./userControlDialog.vue";
 import { defineComponent, ref, reactive, getCurrentInstance } from "vue";
 import { getUserList } from "@/api/userCenter/userControl/index";
-import newTable from "@/components/newTable.vue";
 import { getUserListFun } from "./property";
 
 export default defineComponent({
-  name: "login",
-  components: { newTable },
+  name: "userControl",
+  components: { newTable, userControlDialog },
   setup() {
     // 当前setup的return = internalInstance.setupState
     const internalInstance: any = getCurrentInstance();
 
-    // data
+    // 变量：data
     let UserList = getUserListFun(internalInstance);
 
     // $ref
     const newTable = ref();
+    const userControlDialog = ref();
 
     //  方法：methods
+    // 例子
     const aa = () => {
       newTable.value.handleCurrentChange(1);
     };
+    // 编辑按钮
+    const redact = () => {
+      userControlDialog.value.setDialogVisible(true);
+    };
 
     // 抛出
-    return { UserList, newTable, getUserList, aa };
+    return {
+      UserList,
+      newTable,
+      userControlDialog,
+      getUserList,
+      aa,
+      redact,
+    };
   },
 });
 </script>

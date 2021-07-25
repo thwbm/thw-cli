@@ -4,6 +4,7 @@ import { t } from "@/i18n";
 export const routes: Array<RouteRecordRaw> = [
   /** meat属性值的含义
    * title 菜单名称
+   * icon 图标
    * isNoMenu 是否是菜单
    * path 路由地址
    */
@@ -36,6 +37,7 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import("@/components/layout/index.vue"),
     meta: {
       title: t("aside.userCenter.title"),
+      icon: "el-icon-user-solid",
     },
     children: [
       {
@@ -56,6 +58,7 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import("@/components/layout/index.vue"),
     meta: {
       title: t("aside.general.title"),
+      icon: "el-icon-s-order",
     },
     children: [
       {

@@ -71,7 +71,7 @@ const getUserListFun = (internalInstance: any) => {
               event.stopPropagation();
               // 阻止该元素默认事件
               event.preventDefault();
-              internalInstance.setupState.aa();
+              internalInstance.setupState.redact();
             },
           },
           {
