@@ -1,6 +1,6 @@
 <template>
   <el-container id="layout">
-    <el-aside id="aside" :style="`width:${isCollapse ? 64 : 300}px`">
+    <el-aside id="aside" :style="`width:${isCollapse ? 65 : 300}px`">
       <el-scrollbar>
         <menuComponent />
       </el-scrollbar>
