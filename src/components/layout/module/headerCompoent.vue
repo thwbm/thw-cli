@@ -66,6 +66,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .header-compoent {
+  height: 60px;
   .is-collapse {
     font-size: 30px;
     line-height: 60px;

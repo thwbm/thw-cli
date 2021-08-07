@@ -1,20 +1,36 @@
 // 用户信息
-import { getUser } from "@/api/login/index";
+import { getLogin, getUser } from "@/api/login/index";
 import { decrypt } from "@/utils/crypto";
 import _this from "@/main";
 import { size } from "lodash-es";
 
 const state = {
+  /**
+   * login 是否在线
+   * user 用户信息
+   */
+  login: "",
   user: {},
 };
 
 const mutations = {
+  set_login: (state: any, login: any) => {
+    state.login = login;
+  },
   set_user: (state: any, user: any) => {
     state.user = user;
   },
 };
 
 const actions = {
+  getLogin({ commit }: any) {
+    return new Promise((resolve) => {
+      getLogin().then((res: any) => {
+        commit("set_login", res.data || false);
+        resolve(res.data || false);
+      });
+    });
+  },
   getUser({ commit }: any, updated: false) {
     // 请求用户信息==》判断是否（存在缓存时）更新缓存数据：updated=fales不更新
     // resolve reject
@@ -37,6 +53,7 @@ const actions = {
 };
 
 const getters = {
+  login: (state: any) => state.login,
   user: (state: any) => state.user,
 };
 

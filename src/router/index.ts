@@ -17,7 +17,7 @@ export const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/",
-    redirect: { name: "login" },
+    redirect: { name: "userCenter" },
     meta: {
       isNoMenu: true,
     },

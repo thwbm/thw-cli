@@ -44,6 +44,7 @@ service.interceptors.response.use(
       const { code, msg } = res.data;
       if (code === 400) {
         _this.$localStorage.clear();
+        _this.$store.commit("user/set_login", false);
         _this.$router.push("/login");
         if (msg) {
           _this.$notify.info({

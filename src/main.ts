@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import "./permission";
 
 // element-plus 按需加载
 import { useElementPlus } from "./elementPlus";

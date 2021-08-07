@@ -8,10 +8,15 @@
     <el-container id="content">
       <el-header id="content-header">
         <headerCompoent />
+        <menuKeepAlive />
       </el-header>
       <el-scrollbar id="content-main">
         <el-main>
-          <router-view></router-view>
+          <router-view v-slot="{ Component }">
+            <!-- <keep-alive> -->
+            <component :is="Component" />
+            <!-- </keep-alive> -->
+          </router-view>
         </el-main>
       </el-scrollbar>
     </el-container>
@@ -22,10 +27,11 @@
 <script lang="ts">
 import menuComponent from "./module/menuComponent.vue";
 import headerCompoent from "./module/headerCompoent.vue";
+import menuKeepAlive from "./module/menuKeepAlive.vue";
 import { defineComponent, computed, watch, onMounted } from "vue";
 import { useStore } from "vuex";
 export default defineComponent({
-  components: { menuComponent, headerCompoent },
+  components: { menuComponent, headerCompoent, menuKeepAlive },
   setup() {
     // VUEX：store
     const store = useStore();

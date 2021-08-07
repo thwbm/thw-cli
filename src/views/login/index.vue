@@ -10,7 +10,7 @@
       class="from"
     >
       <el-form-item class="header" prop="radio">
-        <el-radio-group v-model="ruleForm.radio">
+        <el-radio-group v-model="ruleForm.radio" @change="changeRadio">
           <el-radio-button
             v-for="item in radioList"
             :key="item.label"
@@ -47,18 +47,12 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  getCurrentInstance,
-  computed,
-  watch,
-} from "vue";
+import { defineComponent, ref, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
 import { encrypt } from "@/utils/crypto";
 import { useStore } from "vuex";
 import { register, login } from "@/api/login/index";
+import { throttle } from "lodash-es";
 
 export default defineComponent({
   name: "login",
@@ -66,6 +60,9 @@ export default defineComponent({
     // 全局 this
     const internalInstance: any = getCurrentInstance();
     const _this = internalInstance.appContext.config.globalProperties;
+
+    // router
+    const router = useRouter();
 
     // 表单校验规则
     const validateUser = (rule: any, value: string, callback: any) => {
@@ -114,47 +111,53 @@ export default defineComponent({
 
     // VUEX：store
     const store = useStore();
-    const user = computed(() => store.getters["user/user"]);
-
-    const router = useRouter();
 
     // 方法：methods
-    // 确认
-    const submitForm = () => {
-      refForm.value.validate((valid: any) => {
-        if (valid) {
-          const { radio, phone, password } = ruleForm.value;
-          const params = {
-            phone: encrypt(phone),
-            password: encrypt(password, true),
-          };
-          switch (radio) {
-            case 1:
-              login(params).then(({ code, msg }: any) => {
-                if (code === 201) {
-                  store.dispatch("user/getUser"); // 获取用户信息
-                  router.push({ path: "userCenter" });
-                } else if (code === 200 && msg) {
-                  _this
-                    .$confirm(msg, "提示", {
-                      confirmButtonText: "确定",
-                      cancelButtonText: "取消",
-                      type: "warning",
-                    })
-                    .then(() => {
-                      ruleForm.value.radio = 2;
-                      resetForm();
-                    });
-                }
-              });
-              break;
-            case 2:
-              register(params);
-              break;
-          }
-        }
-      });
+    // radio响应变化
+    const changeRadio = (val: any) => {
+      refForm.value.resetFields();
+      ruleForm.value.radio = val;
     };
+    // 确认
+    const submitForm = throttle(
+      () => {
+        refForm.value.validate((valid: any) => {
+          if (valid) {
+            const { radio, phone, password } = ruleForm.value;
+            const params = {
+              phone: encrypt(phone),
+              password: encrypt(password, true),
+            };
+            switch (radio) {
+              case 1:
+                login(params).then(({ code, msg }: any) => {
+                  if (code === 201) {
+                    store.commit("user/set_login", true);
+                    router.push({ path: "/" });
+                  } else if (code === 200 && msg) {
+                    _this
+                      .$confirm(msg, "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning",
+                      })
+                      .then(() => {
+                        ruleForm.value.radio = 2;
+                        resetForm();
+                      });
+                  }
+                });
+                break;
+              case 2:
+                register(params);
+                break;
+            }
+          }
+        });
+      },
+      600,
+      { trailing: false }
+    );
     // 重置
     const resetForm = () => {
       const { radio } = ruleForm.value;
@@ -168,7 +171,7 @@ export default defineComponent({
       ruleForm,
       rules,
       radioList,
-      user,
+      changeRadio,
       submitForm,
       resetForm,
     };
