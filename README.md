@@ -30,4 +30,4 @@
 
 > tsconfig.json：TypeScript 项目的根目录（指定待编译文件和定义编译选项）
 
-> vite.config.ts：webpack 配置，项目编译
+> vue.config.js：webpack 配置，项目编译
