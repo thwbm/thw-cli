@@ -57,7 +57,7 @@ import {
   onMounted,
   onBeforeUnmount,
 } from "vue";
-import elementResizeDetectorMaker from "element-resize-detector";
+// import elementResizeDetectorMaker from "element-resize-detector";
 import { formatter } from "@/utils/utils";
 
 export default defineComponent({
@@ -137,7 +137,9 @@ export default defineComponent({
   setup(props) {
     // 变量：data
     // dom监听
-    const erd = elementResizeDetectorMaker();
+    // const erd = elementResizeDetectorMaker();
+    // erd.listenTo(dom) 监听
+    // erd.uninstall(dom) 删除
     // 报表高度
     const erdHeight = ref();
     // 报表数据
@@ -175,22 +177,27 @@ export default defineComponent({
       getParams.page = val;
       getTableData();
     };
+    // 动态设置报表高度
+    const getErdHeight = () => {
+      const elTable = document.getElementById("el-table");
+      if (!props.height && elTable) {
+        const elMainRect = document.documentElement.getBoundingClientRect();
+        const elTableRect = elTable.getBoundingClientRect();
+        // 报表高度 = 内容main的高度 - 报表到main顶部距离 - 报表到底部距离（内容区域padding-bottom:20px + 分页器所占内容区域高度）
+        erdHeight.value = elMainRect.height - elTableRect.top - 20 - 42;
+      }
+    };
 
     // 生命周期
     getTableData();
     onMounted(() => {
-      // 动态设置报表高度
-      erd.listenTo(document.getElementById("content-main"), (elMain: any) => {
-        const elTable = document.getElementById("el-table");
-        if (!props.height && elTable) {
-          // 报表高度 = 内容main的高度 - 报表到main顶部距离 - 报表到底部距离（内容区域padding-bottom:20px + 分页器所占内容区域高度）
-          erdHeight.value = elMain.offsetHeight - elTable.offsetTop - 20 - 42;
-        }
-      });
+      getErdHeight();
+      // 监听
+      window.addEventListener("resize", getErdHeight);
     });
     onBeforeUnmount(() => {
       // 删除监听
-      erd.uninstall(document.getElementById("content-main"));
+      window.removeEventListener("resize", getErdHeight);
     });
 
     // 抛出

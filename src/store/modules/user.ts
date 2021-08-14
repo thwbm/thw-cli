@@ -24,11 +24,15 @@ const mutations = {
 
 const actions = {
   getLogin({ commit }: any) {
-    return new Promise((resolve) => {
-      getLogin().then((res: any) => {
-        commit("set_login", res.data || false);
-        resolve(res.data || false);
-      });
+    return new Promise((resolve, reject) => {
+      getLogin()
+        .then((res: any) => {
+          commit("set_login", res.data || false);
+          resolve(res.data || false);
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
   },
   getUser({ commit }: any, updated: false) {
