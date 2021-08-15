@@ -37,7 +37,7 @@
     </el-table>
     <!-- 分页器 -->
     <el-pagination
-      class="table-pegination"
+      id="table-pegination"
       :page-sizes="pageSizes"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
@@ -180,11 +180,22 @@ export default defineComponent({
     // 动态设置报表高度
     const getErdHeight = () => {
       const elTable = document.getElementById("el-table");
-      if (!props.height && elTable) {
+      const tablePegination = document.getElementById("table-pegination");
+      const elMain = document.getElementById("el-main");
+      if (!props.height && elTable && tablePegination && elMain) {
         const elMainRect = document.documentElement.getBoundingClientRect();
         const elTableRect = elTable.getBoundingClientRect();
-        // 报表高度 = 内容main的高度 - 报表到main顶部距离 - 报表到底部距离（内容区域padding-bottom:20px + 分页器所占内容区域高度）
-        erdHeight.value = elMainRect.height - elTableRect.top - 20 - 42;
+        const tablePeginationRect = tablePegination.getBoundingClientRect();
+        const tablePeginationStyle = getComputedStyle(tablePegination);
+        const elMainStyle = getComputedStyle(elMain);
+        // 报表高度 = 内容main的高度 - 报表到main顶部距离 - 报表到底部距离
+        erdHeight.value = Math.floor(
+          elMainRect.height -
+            elTableRect.top -
+            tablePeginationRect.height -
+            Number(tablePeginationStyle.marginTop.split("px")[0]) -
+            Number(elMainStyle.paddingBottom.split("px")[0])
+        );
       }
     };
 
@@ -218,7 +229,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #erd-table {
-  .table-pegination {
+  #table-pegination {
     text-align: right;
     margin-top: 10px;
   }

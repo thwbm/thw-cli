@@ -31,3 +31,45 @@
 > tsconfig.json：TypeScript 项目的根目录（指定待编译文件和定义编译选项）
 
 > vue.config.js：webpack 配置，项目编译
+
+# 代码格式
+
+<template></template>
+
+<script lang="ts">
+  import { defineComponent } from "vue";
+  export default defineComponent({
+    name: "",
+    props:{ },
+    components:{ },
+    setup() {
+      // 全局 this
+      const internalInstance: any = getCurrentInstance();
+      const _this = internalInstance.appContext.config.globalProperties;
+
+      // 当前setup的return = internalInstance.setupState
+      const internalInstance: any = getCurrentInstance();
+
+      // router
+      const router = useRouter();
+
+      // 表单校验规则
+      // 变量：data
+
+      // $ref
+
+      // VUEX：store
+
+      // 监听：watch
+
+      // 方法：methods
+
+      // 生命周期
+
+      // 抛出
+      return { };
+    },
+  });
+</script>
+
+<style lang="scss" scoped></style>

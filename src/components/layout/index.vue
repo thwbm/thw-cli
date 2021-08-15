@@ -11,7 +11,7 @@
         <menuKeepAlive />
       </el-header>
       <el-scrollbar id="content-main">
-        <el-main>
+        <el-main id="el-main">
           <router-view v-slot="{ Component }">
             <!-- <keep-alive> -->
             <component :is="Component" />
