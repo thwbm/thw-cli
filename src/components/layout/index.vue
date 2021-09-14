@@ -13,9 +13,9 @@
       <el-scrollbar id="content-main">
         <el-main id="el-main">
           <router-view v-slot="{ Component }">
-            <!-- <keep-alive> -->
-            <component :is="Component" />
-            <!-- </keep-alive> -->
+            <keep-alive :include="include" :exclude="exclude">
+              <component :is="Component" />
+            </keep-alive>
           </router-view>
         </el-main>
       </el-scrollbar>
@@ -28,30 +28,27 @@
 import menuComponent from "./module/menuComponent.vue";
 import headerCompoent from "./module/headerCompoent.vue";
 import menuKeepAlive from "./module/menuKeepAlive.vue";
-import { defineComponent, computed, watch, onMounted } from "vue";
+import { defineComponent, ref, reactive, computed } from "vue";
 import { useStore } from "vuex";
+
 export default defineComponent({
   components: { menuComponent, headerCompoent, menuKeepAlive },
   setup() {
     // VUEX：store
     const store = useStore();
     const isCollapse = computed(() => store.getters["setting/isCollapse"]);
+    const menuKA = computed(() => {
+      return store.getters["menuKA/menuKA"].map((item: any) => item.name);
+    });
 
-    // 生命周期
-    // onMounted(() => {
-    //   window.onresize = (val: any) => {
-    //     console.log("object :>> ", val, 1);
-    //   };
-    // });
-    return { isCollapse };
-  },
-  mounted() {
-    this.$i18n.locale = "zh-cn";
-    // console.log(
-    //   "object :>> ",
-    //   this.$i18n.locale,
-    //   this.$t("aside.general.title")
-    // );
+    // 变量：data
+    //  keepalive 白名单
+    const include = reactive(menuKA);
+    // keepalive 黑名单
+    const exclude = ref([]);
+
+    // 抛出
+    return { isCollapse, include, exclude };
   },
 });
 </script>

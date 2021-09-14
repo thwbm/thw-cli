@@ -7,7 +7,7 @@
         v-for="item in matched"
         :to="{ path: item.meta.path || item.path }"
         :key="item.fullPath"
-        >{{ item.meta.title }}</el-breadcrumb-item
+        >{{ $t(item.meta.title) }}</el-breadcrumb-item
       >
     </el-breadcrumb>
 
@@ -24,6 +24,9 @@ import { logout } from "@/api/login/index";
 export default defineComponent({
   name: "headerCompoent",
   setup() {
+    // router
+    const route = useRoute();
+
     // 变量：data
     // 侧边栏展开收起按钮icon
     const collapseIcon = ref("el-icon-s-fold");
@@ -35,15 +38,6 @@ export default defineComponent({
     const isCollapse = computed(() => store.getters["setting/isCollapse"]);
     const set_isCollapse = (val: any) =>
       store.commit("setting/set_isCollapse", val);
-
-    // 监听：watch
-    watch(
-      useRoute(),
-      (val: any) => {
-        matched.value = val.matched;
-      },
-      { immediate: true, deep: true }
-    );
 
     // 方法：methods
     // 修改侧边栏展开收起
@@ -57,6 +51,15 @@ export default defineComponent({
     const setLogout = () => {
       logout();
     };
+
+    // 监听：watch
+    watch(
+      route,
+      (val: any) => {
+        matched.value = val.matched;
+      },
+      { immediate: true, deep: true }
+    );
 
     // 抛出
     return { collapseIcon, matched, setIsCollapse, setLogout };

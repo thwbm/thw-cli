@@ -1,5 +1,4 @@
 // 全局可设置项
-import _this from "@/main";
 
 const state = {
   /**
