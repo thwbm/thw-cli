@@ -95,15 +95,6 @@ export default defineComponent({
     // 是否显示
     const dialogObj = ref();
 
-    // 监听：watch
-    watch(
-      () => props.dialogVisible,
-      () => {
-        dialogObj.value = props.dialogVisible;
-      },
-      { immediate: true, deep: true }
-    );
-
     // 方法：methods
     // 修改 Dialog 显隐状态
     const setDialogVisible = (val: boolean) => {
@@ -122,6 +113,15 @@ export default defineComponent({
     const close = () => {
       console.log("close :>> ", "关闭的回调");
     };
+
+    // 监听：watch
+    watch(
+      () => props.dialogVisible,
+      () => {
+        dialogObj.value = props.dialogVisible;
+      },
+      { immediate: true, deep: true }
+    );
 
     // 抛出
     return { dialogObj, setDialogVisible, open, beforeClose, close };

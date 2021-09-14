@@ -1,3 +1,4 @@
+// 按需引用（弃用）
 import {
   ElAlert,
   ElAside,
@@ -58,6 +59,7 @@ import {
   ElRadioGroup,
   ElRate,
   ElRow,
+  ElSpace,
   ElScrollbar,
   ElSelect,
   ElSlider,
@@ -70,6 +72,7 @@ import {
   ElTableColumn,
   ElTabs,
   ElTag,
+  ElCheckTag,
   ElTimePicker,
   ElTimeSelect,
   ElTimeline,
@@ -145,6 +148,7 @@ const components = [
   ElRadioGroup,
   ElRate,
   ElRow,
+  ElSpace,
   ElScrollbar,
   ElSelect,
   ElSlider,
@@ -157,6 +161,7 @@ const components = [
   ElTableColumn,
   ElTabs,
   ElTag,
+  ElCheckTag,
   ElTimePicker,
   ElTimeSelect,
   ElTimeline,

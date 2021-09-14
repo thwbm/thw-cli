@@ -18,7 +18,7 @@ module.exports = {
   // devServer Options don't belong into `configureWebpack`
   devServer: {
     // Network
-    public: "http://192.168.1.101:8080", // http://0.0.0.0:8080/
+    public: "http://192.168.1.102:8080",
     // Locale
     host: "0.0.0.0",
     port: "8080",

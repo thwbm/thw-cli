@@ -60,9 +60,9 @@
 
       // VUEX：store
 
-      // 监听：watch
-
       // 方法：methods
+
+      // 监听：watch
 
       // 生命周期
 

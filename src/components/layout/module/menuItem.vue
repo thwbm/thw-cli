@@ -3,14 +3,14 @@
     <el-submenu v-if="item.children" :index="item.meta.path || item.name">
       <template #title>
         <i :class="item.meta.icon"></i>
-        <span>{{ item.meta.title }}</span>
+        <span>{{ $t(item.meta.title) }}</span>
       </template>
       <menu-item :routes="item.children" />
     </el-submenu>
     <el-menu-item v-else-if="!item.meta.isNoMenu" :index="item.meta.path">
       <template #title>
         <i :class="item.meta.icon"></i>
-        <span>{{ item.meta.title }}</span>
+        <span>{{ $t(item.meta.title) }}</span>
       </template>
     </el-menu-item>
   </template>
@@ -24,7 +24,7 @@ export default defineComponent({
   props: {
     routes: { type: Array },
   },
-  setup(props) {
+  setup() {
     return {};
   },
 });

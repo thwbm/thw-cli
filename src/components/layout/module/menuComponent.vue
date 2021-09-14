@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import menuItem from "./menuItem.vue";
-import { defineComponent, ref, computed, watch } from "vue";
+import { defineComponent, ref, reactive, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -21,9 +21,13 @@ export default defineComponent({
   name: "menuComponent",
   components: { menuItem },
   setup() {
+    // router
+    const route = useRoute();
+    const router = useRouter();
+
     // 变量：data
     // 路由集合
-    const { routes } = useRouter().options;
+    const { routes } = reactive(router.options);
     // 当前路由
     const routePath = ref();
 
@@ -33,7 +37,7 @@ export default defineComponent({
 
     // 监听：watch
     watch(
-      useRoute(),
+      route,
       (val: any) => {
         routePath.value = val.meta.path;
       },
