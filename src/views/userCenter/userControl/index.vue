@@ -16,13 +16,7 @@
 <script lang="ts">
 import newTable from "@/components/newTable.vue";
 import userControlDialog from "./userControlDialog.vue";
-import {
-  defineComponent,
-  ref,
-  reactive,
-  getCurrentInstance,
-  computed,
-} from "vue";
+import { defineComponent, ref, getCurrentInstance, computed } from "vue";
 import { useStore } from "vuex";
 import { getUserList } from "@/api/userCenter/userControl/index";
 import { getUserListFun } from "./property";
@@ -69,6 +63,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scope>
-</style>

@@ -1,14 +1,14 @@
 // 通用函数API
 import { size } from "lodash-es";
-import { encrypt, decrypt } from "@/utils/crypto";
+import { decrypt } from "@/utils/crypto";
 
 // 报表默认数据格式化
-const formatter = (row: any, column: any, cellValue: any, index: any) => {
+const formatter = (row: any, column: any, cellValue: any) => {
   return cellValue || "--";
 };
 
 // 手机号格式化
-const formatterPhone = (row: any, column: any, cellValue: any, index: any) => {
+const formatterPhone = (row: any, column: any, cellValue: any) => {
   return starEncrypt(decrypt(cellValue), 3, 3, 3) || "--";
 };
 

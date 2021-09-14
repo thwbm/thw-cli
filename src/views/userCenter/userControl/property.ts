@@ -34,7 +34,7 @@ const getUserListFun = (internalInstance: any) => {
     {
       label: "头像",
       prop: "image",
-      formatter: (row: any, column: any, cellValue: any, index: any) => {
+      formatter: () => {
         return h(
           ElButton,
           {
@@ -62,7 +62,8 @@ const getUserListFun = (internalInstance: any) => {
       label: "操作",
       prop: "operation",
       fixed: "right",
-      formatter: (row: any, column: any, cellValue: any, index: any) => {
+      formatter: () => {
+        // row: any, column: any, cellValue: any, index: any
         return h(
           ElButton,
           {

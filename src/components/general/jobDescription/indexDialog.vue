@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, reactive } from "vue";
+import { defineComponent, ref, watch } from "vue";
 
 export default defineComponent({
   props: {
@@ -36,6 +36,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-</style>
