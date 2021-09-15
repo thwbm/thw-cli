@@ -11,12 +11,29 @@
       >
     </el-breadcrumb>
 
-    <el-button class="logout" @click="setLogout">退出</el-button>
+    <div class="right">
+      <el-dropdown class="language" trigger="click" @command="handleLanguage">
+        <span class="el-dropdown-link">
+          {{ language }}<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item
+              v-for="item in languageList"
+              :key="item"
+              :command="item"
+              >{{ item }}</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <el-button class="logout" @click="setLogout">退出</el-button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from "vue";
+import { defineComponent, ref, getCurrentInstance, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { logout } from "@/api/login/index";
@@ -24,6 +41,10 @@ import { logout } from "@/api/login/index";
 export default defineComponent({
   name: "headerCompoent",
   setup() {
+    // 全局 this
+    const internalInstance: any = getCurrentInstance();
+    const _this = internalInstance.appContext.config.globalProperties;
+
     // router
     const route = useRoute();
 
@@ -32,6 +53,9 @@ export default defineComponent({
     const collapseIcon = ref("el-icon-s-fold");
     // 面包屑
     const matched = ref();
+    // 语言切换
+    const language = ref(`${_this.$i18n.global.locale}`);
+    const languageList = computed(() => _this.$i18n.global.availableLocales);
 
     // VUEX：store
     const store = useStore();
@@ -46,6 +70,11 @@ export default defineComponent({
         ? "el-icon-s-fold"
         : "el-icon-s-unfold";
       set_isCollapse(!isCollapse.value);
+    };
+    // 语言切换回调
+    const handleLanguage = (val: string) => {
+      language.value = val;
+      _this.$i18n.global.locale = val;
     };
     // 退出登录
     const setLogout = () => {
@@ -62,7 +91,15 @@ export default defineComponent({
     );
 
     // 抛出
-    return { collapseIcon, matched, setIsCollapse, setLogout };
+    return {
+      collapseIcon,
+      matched,
+      language,
+      languageList,
+      setIsCollapse,
+      handleLanguage,
+      setLogout,
+    };
   },
 });
 </script>
@@ -80,9 +117,11 @@ export default defineComponent({
     line-height: 60px;
     margin-left: 20px;
   }
-  .logout {
-    float: right;
-    margin-top: 14px;
+  .right {
+    line-height: 60px;
+    & > * {
+      margin-left: 20px;
+    }
   }
 }
 </style>

@@ -52,6 +52,7 @@
 
       // router
       const router = useRouter();
+      const route = useRoute();
 
       // 表单校验规则
       // 变量：data

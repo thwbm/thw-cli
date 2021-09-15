@@ -1,12 +1,12 @@
 <template>
   <template v-for="item in routes" :key="item.path">
-    <el-submenu v-if="item.children" :index="item.meta.path || item.name">
+    <el-sub-menu v-if="item.children" :index="item.meta.path || item.name">
       <template #title>
         <i :class="item.meta.icon"></i>
         <span>{{ $t(item.meta.title) }}</span>
       </template>
       <menu-item :routes="item.children" />
-    </el-submenu>
+    </el-sub-menu>
     <el-menu-item v-else-if="!item.meta.isNoMenu" :index="item.meta.path">
       <template #title>
         <i :class="item.meta.icon"></i>
